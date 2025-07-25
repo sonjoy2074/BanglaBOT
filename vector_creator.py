@@ -57,7 +57,7 @@ def store_in_chromadb(chunks, embedding_model, db_path, collection_name):
 
     print("Chunks stored successfully.")
 
-# === MAIN ===
+# Main execution
 if __name__ == "__main__":
     print("Extracting text from PDF...")
     raw_text = extract_text_from_pdf(BOOK_PATH)

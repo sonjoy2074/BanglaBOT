@@ -5,23 +5,23 @@ from openai import OpenAI
 from dotenv import load_dotenv
 import os
 
-# === LOAD ENV ===
+#load environment variables
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-# === CONFIGURATION ===
+# Configuration
 CHROMA_DB_DIR = "bangla_chroma_db"
 COLLECTION_NAME = "bangla_book"
 MODEL_NAME = "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"
 OPENAI_MODEL = "gpt-3.5-turbo"  # or "gpt-4"
 
-# === LOAD CHROMADB COLLECTION ===
+# Load ChromaDB collection 
 @st.cache_resource
 def load_chroma_collection():
     client_chroma = chromadb.PersistentClient(path=CHROMA_DB_DIR)
     return client_chroma.get_or_create_collection(COLLECTION_NAME)
 
-# === LOAD EMBEDDING MODEL ===
+# Load embedding model
 @st.cache_resource
 def load_embedding_model():
     return SentenceTransformer(MODEL_NAME)
@@ -35,7 +35,7 @@ if "messages" not in st.session_state:
         {"role": "system", "content": "You are a helpful assistant that answers questions based only on the given Bangla book context."}
     ]
 
-# === UI ===
+# UI part
 st.title("🧠 BanglaBot: Bangla & English Study Assistant")
 
 user_query = st.text_input("🔎 Enter your question (Bangla or English):")
@@ -63,7 +63,6 @@ if user_query:
         model=OPENAI_MODEL,
         messages=st.session_state.messages
     )
-
     answer = response.choices[0].message.content
     st.session_state.messages.append({"role": "assistant", "content": answer})
 
